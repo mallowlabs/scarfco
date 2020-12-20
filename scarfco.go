@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/xml"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -55,6 +56,8 @@ func run() error {
 		fmt.Println(tools.ConvertCPD(bytes))
 	case "BugCollection":
 		fmt.Println(tools.ConvertFindBugs(bytes))
+	default:
+		return errors.New("unknown format error")
 	}
 	return nil
 }
@@ -71,7 +74,7 @@ func selectFormat(content []byte) (string, error) {
 			break
 		}
 		if err != nil {
-			panic(err)
+			return "", err
 		}
 		switch t := token.(type) {
 		case xml.StartElement:
