@@ -26,6 +26,8 @@ jobs:
     # ... (snipped)
     - name: Setup Reviewdog
       uses: reviewdog/action-setup@v1
+    - name: Setup scarfco
+      run: curl -sfL https://raw.githubusercontent.com/mallowlabs/scarfco/main/install.sh | sh -s
     - name: Run FindBugs
       run: mvn findbugs:findbugs
     - name: Run Reviewdog (FindBugs)
