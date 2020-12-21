@@ -28,7 +28,7 @@ func ConvertFindBugs(content []byte) string {
 		Path string `xml:",cdata"`
 	}
 	type Project struct {
-		SrcDir SrcDir `xml:"SrcDir"`
+		SrcDirs []SrcDir `xml:"SrcDir"`
 	}
 
 	type BugCollection struct {
@@ -46,7 +46,7 @@ func ConvertFindBugs(content []byte) string {
 
 	m := map[string][]BugInstance{}
 
-	srcDir := bc.Project.SrcDir.Path
+	srcDir := bc.Project.SrcDirs[0].Path
 
 	for _, bi := range bc.BugInstances {
 		v, ok := m[bi.SourceLine.Sourcepath]
