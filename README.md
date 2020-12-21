@@ -5,6 +5,7 @@ A Static Code Analysis tools Result Files COnverter.
 This tool converts result files of static code analysis tools to the [Checkstyle](https://checkstyle.sourceforge.io/) format.
 Currently supports above tools XMLs.
 
+* [SpotBugs](https://spotbugs.github.io/)
 * [FindBugs](http://findbugs.sourceforge.net/)
 * [PMD](https://pmd.github.io/)
 * [CPD](https://pmd.github.io/latest/pmd_userdocs_cpd.html)
@@ -28,12 +29,12 @@ jobs:
       uses: reviewdog/action-setup@v1
     - name: Setup scarfco
       run: curl -sfL https://raw.githubusercontent.com/mallowlabs/scarfco/main/install.sh | sh -s
-    - name: Run FindBugs
-      run: mvn findbugs:findbugs
-    - name: Run Reviewdog (FindBugs)
+    - name: Run SpotBugs
+      run: mvn spotbugs:spotbugs
+    - name: Run Reviewdog (SpotBugs)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/findbugs-result.xml | scanrfco | reviewdog -name=findbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/spotbugsXml.xml | scanrfco | reviewdog -name=spotbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 If you use PMD.
