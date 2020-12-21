@@ -38,7 +38,7 @@ func ConvertPMD(content []byte) string {
 		xml.Escape(&buf, []byte(file.Name))
 		buf.WriteString("\">\n")
 		for _, violation := range file.Violations {
-			buf.WriteString("    <error")
+			buf.WriteString("    <error ")
 
 			buf.WriteString("line=\"")
 			buf.WriteString(fmt.Sprint(violation.Beginline))
