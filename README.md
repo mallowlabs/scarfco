@@ -34,7 +34,7 @@ jobs:
     - name: Run Reviewdog (SpotBugs)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/spotbugsXml.xml | scanrfco | reviewdog -name=spotbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/spotbugsXml.xml | ./bin/scanrfco | reviewdog -name=spotbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 If you use PMD.
@@ -45,7 +45,7 @@ If you use PMD.
     - name: Run Reviewdog (PMD)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/pmd.xml | scanrfco | reviewdog -name=pmd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/pmd.xml | ./bin/scanrfco | reviewdog -name=pmd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 If you use CPD.
@@ -56,7 +56,7 @@ If you use CPD.
     - name: Run Reviewdog (CPD)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/pmd-cpd.xml | scanrfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/pmd-cpd.xml | ./bin/scanrfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 ## How to build
