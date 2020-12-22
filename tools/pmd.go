@@ -45,7 +45,7 @@ func ConvertPMD(content []byte) string {
 			buf.WriteString("\" ")
 
 			buf.WriteString("severity=\"")
-			buf.WriteString(fmt.Sprint(violation.Priority))
+			buf.WriteString(severityPMD(violation.Priority))
 			buf.WriteString("\" ")
 
 			buf.WriteString("message=\"")
@@ -61,4 +61,14 @@ func ConvertPMD(content []byte) string {
 
 	buf.WriteString("</checkstyle>")
 	return buf.String()
+}
+
+func severityPMD(priority int) string {
+	if priority == 1 || priority == 2 {
+		return "error"
+	} else if priority == 3 || priority == 4 {
+		return "warning"
+	} else {
+		return "info"
+	}
 }

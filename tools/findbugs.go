@@ -70,7 +70,7 @@ func ConvertFindBugs(content []byte) string {
 			buf.WriteString("\" ")
 
 			buf.WriteString("severity=\"")
-			buf.WriteString(fmt.Sprint(bi.Priority))
+			buf.WriteString(severityFindBugs(bi.Priority))
 			buf.WriteString("\" ")
 
 			buf.WriteString("message=\"")
@@ -86,4 +86,14 @@ func ConvertFindBugs(content []byte) string {
 
 	buf.WriteString("</checkstyle>")
 	return buf.String()
+}
+
+func severityFindBugs(priority int) string {
+	if priority == 1 {
+		return "error"
+	} else if priority == 2 {
+		return "warning"
+	} else {
+		return "info"
+	}
 }
