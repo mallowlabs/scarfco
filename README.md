@@ -56,7 +56,7 @@ If you use CPD.
     - name: Run Reviewdog (CPD)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/pmd-cpd.xml | ./bin/scanrfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/cpd.xml | ./bin/scanrfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 ## How to build
