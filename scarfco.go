@@ -11,7 +11,7 @@ import (
 	"log"
 	"os"
 
-	"./tools"
+	"github.com/mallowlabs/scarfco/tools"
 )
 
 func init() {
