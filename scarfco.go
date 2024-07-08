@@ -7,7 +7,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -31,7 +30,7 @@ func read(filename string) ([]byte, error) {
 		defer f.Close()
 		r = f
 	}
-	bytes, _ := ioutil.ReadAll(r)
+	bytes, _ := io.ReadAll(r)
 
 	return bytes, nil
 }
@@ -51,11 +50,11 @@ func run() error {
 
 	switch format {
 	case "pmd":
-		fmt.Println(tools.ConvertPMD(bytes))
+		fmt.Println(tools.ConvertPMD(bytes).ConvertToCheckstyle())
 	case "pmd-cpd":
-		fmt.Println(tools.ConvertCPD(bytes))
+		fmt.Println(tools.ConvertCPD(bytes).ConvertToCheckstyle())
 	case "BugCollection":
-		fmt.Println(tools.ConvertFindBugs(bytes))
+		fmt.Println(tools.ConvertFindBugs(bytes).ConvertToCheckstyle())
 	default:
 		return errors.New("unknown format error")
 	}

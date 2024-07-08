@@ -1,12 +1,11 @@
 package tools
 
 import (
-	"bytes"
 	"encoding/xml"
 	"fmt"
 )
 
-func ConvertCPD(content []byte) string {
+func ConvertCPD(content []byte) *Result {
 	type File struct {
 		Line int    `xml:"line,attr"`
 		Path string `xml:"path,attr"`
@@ -31,10 +30,6 @@ func ConvertCPD(content []byte) string {
 	var cpd PmdCpd
 	xml.Unmarshal(content, &cpd)
 
-	var buf bytes.Buffer
-	buf.WriteString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-	buf.WriteString("<checkstyle version=\"5.0\">\n")
-
 	m := map[string][]ResultFile{}
 
 	for _, duplication := range cpd.Duplications {
@@ -55,34 +50,15 @@ func ConvertCPD(content []byte) string {
 		}
 	}
 
+	result := Result{}
 	for k, v := range m {
-		buf.WriteString("  <file name=\"")
-		xml.Escape(&buf, []byte(k))
-		buf.WriteString("\">\n")
-
+		file := result.AddFile(k)
 		for _, rf := range v {
-			buf.WriteString("    <error ")
-
-			buf.WriteString("line=\"")
-			buf.WriteString(fmt.Sprint(rf.File.Line))
-			buf.WriteString("\" ")
-
-			buf.WriteString("severity=\"warning\" ")
-
-			buf.WriteString("message=\"")
-			buf.WriteString(fmt.Sprint(rf.Duplication.Lines))
-			buf.WriteString(" lines duplicated codes detected: ")
-
-			xml.Escape(&buf, []byte(rf.Another.Path))
-			buf.WriteString(":")
-			buf.WriteString(fmt.Sprint(rf.Another.Line))
-			buf.WriteString("\" ")
-
-			buf.WriteString("source=\"cpd\"/>\n")
+			message := fmt.Sprint(rf.Duplication.Lines) +
+				" lines duplicated codes detected: " +
+				rf.Another.Path + ":" + fmt.Sprint(rf.Another.Line)
+			file.AddError("cpd", "warning", message, rf.File.Line)
 		}
-		buf.WriteString("  </file>\n")
 	}
-
-	buf.WriteString("</checkstyle>")
-	return buf.String()
+	return &result
 }
