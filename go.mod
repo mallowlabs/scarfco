@@ -1,3 +1,3 @@
 module github.com/mallowlabs/scarfco
 
-go 1.17
+go 1.22.5
