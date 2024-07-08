@@ -1,13 +1,11 @@
 package tools
 
 import (
-	"bytes"
 	"encoding/xml"
-	"fmt"
 	"path"
 )
 
-func ConvertFindBugs(content []byte) string {
+func ConvertFindBugs(content []byte) *Result {
 	type SourceLine struct {
 		Start      int    `xml:"start,attr"`
 		Sourcepath string `xml:"sourcepath,attr"`
@@ -40,10 +38,6 @@ func ConvertFindBugs(content []byte) string {
 	var bc BugCollection
 	xml.Unmarshal(content, &bc)
 
-	var buf bytes.Buffer
-	buf.WriteString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-	buf.WriteString("<checkstyle version=\"5.0\">\n")
-
 	m := map[string][]BugInstance{}
 
 	srcDir := bc.Project.SrcDirs[0].Path
@@ -57,35 +51,14 @@ func ConvertFindBugs(content []byte) string {
 		}
 	}
 
+	result := Result{}
 	for k, v := range m {
-		buf.WriteString("  <file name=\"")
-		xml.Escape(&buf, []byte(path.Join(srcDir, k)))
-		buf.WriteString("\">\n")
-
+		file := result.AddFile(path.Join(srcDir, k))
 		for _, bi := range v {
-			buf.WriteString("    <error ")
-
-			buf.WriteString("line=\"")
-			buf.WriteString(fmt.Sprint(bi.SourceLine.Start))
-			buf.WriteString("\" ")
-
-			buf.WriteString("severity=\"")
-			buf.WriteString(severityFindBugs(bi.Priority))
-			buf.WriteString("\" ")
-
-			buf.WriteString("message=\"")
-			xml.Escape(&buf, []byte(bi.LongMessage.Message))
-			buf.WriteString("\" ")
-
-			buf.WriteString("source=\"")
-			xml.Escape(&buf, []byte(bi.Type))
-			buf.WriteString("\"/>\n")
+			file.AddError(bi.Type, severityFindBugs(bi.Priority), bi.LongMessage.Message, bi.SourceLine.Start)
 		}
-		buf.WriteString("  </file>\n")
 	}
-
-	buf.WriteString("</checkstyle>")
-	return buf.String()
+	return &result
 }
 
 func severityFindBugs(priority int) string {

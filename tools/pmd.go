@@ -1,13 +1,11 @@
 package tools
 
 import (
-	"bytes"
 	"encoding/xml"
-	"fmt"
 	"strings"
 )
 
-func ConvertPMD(content []byte) string {
+func ConvertPMD(content []byte) *Result {
 	type Violation struct {
 		Beginline int    `xml:"beginline,attr"`
 		Priority  int    `xml:"priority,attr"`
@@ -29,38 +27,14 @@ func ConvertPMD(content []byte) string {
 	var pmd Pmd
 	xml.Unmarshal(content, &pmd)
 
-	var buf bytes.Buffer
-	buf.WriteString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-	buf.WriteString("<checkstyle version=\"5.0\">\n")
-
+	result := Result{}
 	for _, file := range pmd.Files {
-		buf.WriteString("  <file name=\"")
-		xml.Escape(&buf, []byte(file.Name))
-		buf.WriteString("\">\n")
+		f := result.AddFile(file.Name)
 		for _, violation := range file.Violations {
-			buf.WriteString("    <error ")
-
-			buf.WriteString("line=\"")
-			buf.WriteString(fmt.Sprint(violation.Beginline))
-			buf.WriteString("\" ")
-
-			buf.WriteString("severity=\"")
-			buf.WriteString(severityPMD(violation.Priority))
-			buf.WriteString("\" ")
-
-			buf.WriteString("message=\"")
-			xml.Escape(&buf, []byte(strings.TrimSpace(violation.Message)))
-			buf.WriteString("\" ")
-
-			buf.WriteString("source=\"")
-			xml.Escape(&buf, []byte(violation.Rule))
-			buf.WriteString("\"/>\n")
+			f.AddError(violation.Rule, severityPMD(violation.Priority), strings.TrimSpace(violation.Message), violation.Beginline)
 		}
-		buf.WriteString("  </file>\n")
 	}
-
-	buf.WriteString("</checkstyle>")
-	return buf.String()
+	return &result
 }
 
 func severityPMD(priority int) string {
