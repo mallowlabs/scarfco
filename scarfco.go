@@ -48,15 +48,20 @@ func run() error {
 		return err
 	}
 
+	var result *tools.Result = nil
+
 	switch format {
 	case "pmd":
-		fmt.Println(tools.ConvertPMD(bytes).ConvertToCheckstyle())
+		result = tools.ConvertPMD(bytes)
 	case "pmd-cpd":
-		fmt.Println(tools.ConvertCPD(bytes).ConvertToCheckstyle())
+		result = tools.ConvertCPD(bytes)
 	case "BugCollection":
-		fmt.Println(tools.ConvertFindBugs(bytes).ConvertToCheckstyle())
+		result = tools.ConvertFindBugs(bytes)
 	default:
 		return errors.New("unknown format error")
+	}
+	if result != nil {
+		fmt.Println(result.ConvertToCheckstyle())
 	}
 	return nil
 }
