@@ -62,7 +62,7 @@ func run() error {
 		return errors.New("unknown format error")
 	}
 	if result != nil {
-		fmt.Println(result.ConvertToCheckstyle())
+		fmt.Println(output.ToChekstyle(result))
 	}
 	return nil
 }
