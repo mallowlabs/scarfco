@@ -7,7 +7,7 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
-func ConvertFindBugs(content []byte) *output.Result {
+func convertFindBugs(content []byte) *output.Result {
 	type SourceLine struct {
 		Start      int    `xml:"start,attr"`
 		Sourcepath string `xml:"sourcepath,attr"`
