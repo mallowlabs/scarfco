@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"encoding/xml"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -44,55 +41,14 @@ func run() error {
 
 	bytes, _ := read(filename)
 
-	format, err := selectFormat(bytes)
+	result, err := input.Convert(bytes)
 	if err != nil {
 		return err
-	}
-
-	var result *output.Result = nil
-
-	switch format {
-	case "pmd":
-		result = input.ConvertPMD(bytes)
-	case "pmd-cpd":
-		result = input.ConvertCPD(bytes)
-	case "BugCollection":
-		result = input.ConvertFindBugs(bytes)
-	default:
-		return errors.New("unknown format error")
 	}
 	if result != nil {
 		fmt.Println(output.ToChekstyle(result))
 	}
 	return nil
-}
-
-func selectFormat(content []byte) (string, error) {
-	d := xml.NewDecoder(bytes.NewReader(content))
-	format := ""
-
-	for {
-		token, err := d.Token()
-
-		if err == io.EOF {
-			err = nil
-			break
-		}
-		if err != nil {
-			return "", err
-		}
-		switch t := token.(type) {
-		case xml.StartElement:
-			format = t.Name.Local
-			break
-		default:
-			break
-		}
-		if format != "" {
-			break
-		}
-	}
-	return format, nil
 }
 
 func main() {
