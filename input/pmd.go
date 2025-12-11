@@ -1,11 +1,13 @@
-package tools
+package input
 
 import (
 	"encoding/xml"
 	"strings"
+
+	"github.com/mallowlabs/scarfco/output"
 )
 
-func ConvertPMD(content []byte) *Result {
+func ConvertPMD(content []byte) *output.Result {
 	type Violation struct {
 		Beginline int    `xml:"beginline,attr"`
 		Priority  int    `xml:"priority,attr"`
@@ -27,7 +29,7 @@ func ConvertPMD(content []byte) *Result {
 	var pmd Pmd
 	xml.Unmarshal(content, &pmd)
 
-	result := Result{}
+	result := output.Result{}
 	for _, file := range pmd.Files {
 		f := result.AddFile(file.Name)
 		for _, violation := range file.Violations {

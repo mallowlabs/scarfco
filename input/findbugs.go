@@ -1,11 +1,13 @@
-package tools
+package input
 
 import (
 	"encoding/xml"
 	"path"
+
+	"github.com/mallowlabs/scarfco/output"
 )
 
-func ConvertFindBugs(content []byte) *Result {
+func ConvertFindBugs(content []byte) *output.Result {
 	type SourceLine struct {
 		Start      int    `xml:"start,attr"`
 		Sourcepath string `xml:"sourcepath,attr"`
@@ -51,7 +53,7 @@ func ConvertFindBugs(content []byte) *Result {
 		}
 	}
 
-	result := Result{}
+	result := output.Result{}
 	for k, v := range m {
 		file := result.AddFile(path.Join(srcDir, k))
 		for _, bi := range v {
