@@ -11,7 +11,7 @@ import (
 	"os"
 
 	"github.com/mallowlabs/scarfco/input"
-	"github.com/mallowlabs/scarfco/tools"
+	"github.com/mallowlabs/scarfco/output"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func run() error {
 		return err
 	}
 
-	var result *tools.Result = nil
+	var result *output.Result = nil
 
 	switch format {
 	case "pmd":
