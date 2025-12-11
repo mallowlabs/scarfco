@@ -41,11 +41,11 @@ func Convert(content []byte) (*output.Result, error) {
 
 	switch format {
 	case "pmd":
-		result = ConvertPMD(content)
+		result = convertPMD(content)
 	case "pmd-cpd":
-		result = ConvertCPD(content)
+		result = convertCPD(content)
 	case "BugCollection":
-		result = ConvertFindBugs(content)
+		result = convertFindBugs(content)
 	default:
 		return nil, errors.New("unknown format error")
 	}

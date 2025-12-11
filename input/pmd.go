@@ -7,7 +7,7 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
-func ConvertPMD(content []byte) *output.Result {
+func convertPMD(content []byte) *output.Result {
 	type Violation struct {
 		Beginline int    `xml:"beginline,attr"`
 		Priority  int    `xml:"priority,attr"`

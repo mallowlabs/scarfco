@@ -7,7 +7,7 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
-func ConvertCPD(content []byte) *output.Result {
+func convertCPD(content []byte) *output.Result {
 	type File struct {
 		Line int    `xml:"line,attr"`
 		Path string `xml:"path,attr"`
