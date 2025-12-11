@@ -63,7 +63,7 @@ If you use CPD.
 
 Requirements:
 
-* Go 1.15.6+
+* Go 1.24.0+
 
 ```shell
 $ go build scarfco.go
