@@ -5,9 +5,31 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
+	"os"
 
 	"github.com/mallowlabs/scarfco/output"
 )
+
+func Read(filename string) ([]byte, error) {
+	var r io.Reader
+	switch filename {
+	case "", "-":
+		r = os.Stdin
+	default:
+		f, err := os.Open(filename)
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+		r = f
+	}
+	bytes, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes, nil
+}
 
 func Convert(content []byte) (*output.Result, error) {
 	format, err := selectFormat(content)
