@@ -1,11 +1,13 @@
-package tools
+package input
 
 import (
 	"encoding/xml"
 	"fmt"
+
+	"github.com/mallowlabs/scarfco/tools"
 )
 
-func ConvertCPD(content []byte) *Result {
+func ConvertCPD(content []byte) *tools.Result {
 	type File struct {
 		Line int    `xml:"line,attr"`
 		Path string `xml:"path,attr"`
@@ -50,7 +52,7 @@ func ConvertCPD(content []byte) *Result {
 		}
 	}
 
-	result := Result{}
+	result := tools.Result{}
 	for k, v := range m {
 		file := result.AddFile(k)
 		for _, rf := range v {

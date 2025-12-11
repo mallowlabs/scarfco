@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/mallowlabs/scarfco/input"
 	"github.com/mallowlabs/scarfco/tools"
 )
 
@@ -52,11 +53,11 @@ func run() error {
 
 	switch format {
 	case "pmd":
-		result = tools.ConvertPMD(bytes)
+		result = input.ConvertPMD(bytes)
 	case "pmd-cpd":
-		result = tools.ConvertCPD(bytes)
+		result = input.ConvertCPD(bytes)
 	case "BugCollection":
-		result = tools.ConvertFindBugs(bytes)
+		result = input.ConvertFindBugs(bytes)
 	default:
 		return errors.New("unknown format error")
 	}
