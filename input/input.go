@@ -69,9 +69,7 @@ func selectFormat(content []byte) (string, error) {
 		switch t := token.(type) {
 		case xml.StartElement:
 			format = t.Name.Local
-			break
 		default:
-			break
 		}
 		if format != "" {
 			break
