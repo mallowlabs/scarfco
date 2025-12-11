@@ -7,7 +7,7 @@ import (
 )
 
 // ToChekstyle converts a Result object to a Checkstyle XML string.
-func ToChekstyle(r *Result) string {
+func toChekstyle(r *Result) string {
 	var buf bytes.Buffer
 	buf.WriteString("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
 	buf.WriteString("<checkstyle version=\"5.0\">\n")

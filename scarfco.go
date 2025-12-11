@@ -46,7 +46,11 @@ func run() error {
 		return err
 	}
 	if result != nil {
-		fmt.Println(output.ToChekstyle(result))
+		converted, err := output.Convert(result, "checkstyle")
+		if err != nil {
+			return err
+		}
+		fmt.Println(converted)
 	}
 	return nil
 }
