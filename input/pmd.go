@@ -40,11 +40,12 @@ func convertPMD(content []byte) *output.Result {
 }
 
 func severityPMD(priority int) string {
-	if priority == 1 || priority == 2 {
+	switch priority {
+	case 1, 2:
 		return "error"
-	} else if priority == 3 || priority == 4 {
+	case 3, 4:
 		return "warning"
-	} else {
+	default:
 		return "info"
 	}
 }
