@@ -3,25 +3,23 @@ package input
 import (
 	"encoding/xml"
 	"path"
+	"strings"
 
 	"github.com/mallowlabs/scarfco/output"
 )
 
 func convertFindBugs(content []byte) *output.Result {
-	type SourceLine struct {
-		Start      int    `xml:"start,attr"`
-		Sourcepath string `xml:"sourcepath,attr"`
-	}
-
-	type LongMessage struct {
-		Message string `xml:",cdata"`
-	}
-
 	type BugInstance struct {
-		Type        string      `xml:"type,attr"`
-		LongMessage LongMessage `xml:"LongMessage"`
-		SourceLine  SourceLine  `xml:"SourceLine"`
-		Priority    int         `xml:"priority,attr"`
+		Type       string `xml:"type,attr"`
+		Priority   string `xml:"priority,attr"`
+		Category   string `xml:"category,attr"`
+		Message    string `xml:"message,attr"`
+		LineNumber int    `xml:"lineNumber,attr"`
+	}
+
+	type File struct {
+		ClassName    string        `xml:"classname,attr"`
+		BugInstances []BugInstance `xml:"BugInstance"`
 	}
 
 	type SrcDir struct {
@@ -32,43 +30,43 @@ func convertFindBugs(content []byte) *output.Result {
 	}
 
 	type BugCollection struct {
-		XMLName      xml.Name      `xml:"BugCollection"`
-		Project      Project       `xml:"Project"`
-		BugInstances []BugInstance `xml:"BugInstance"`
+		XMLName xml.Name `xml:"BugCollection"`
+		Files   []File   `xml:"file"`
+		Project Project  `xml:"Project"`
 	}
 
 	var bc BugCollection
 	xml.Unmarshal(content, &bc)
 
-	m := map[string][]BugInstance{}
-
-	srcDir := bc.Project.SrcDirs[0].Path
-
-	for _, bi := range bc.BugInstances {
-		v, ok := m[bi.SourceLine.Sourcepath]
-		if ok {
-			m[bi.SourceLine.Sourcepath] = append(v, bi)
-		} else {
-			m[bi.SourceLine.Sourcepath] = []BugInstance{bi}
-		}
+	srcDir := ""
+	if len(bc.Project.SrcDirs) > 0 {
+		srcDir = bc.Project.SrcDirs[0].Path
 	}
 
 	result := output.Result{}
-	for k, v := range m {
-		file := result.AddFile(path.Join(srcDir, k))
-		for _, bi := range v {
-			file.AddError(bi.Type, severityFindBugs(bi.Priority), bi.LongMessage.Message, bi.SourceLine.Start)
+	for _, file := range bc.Files {
+		// com.example.MyClass$InnerClass -> com/example/MyClass.java
+		className := file.ClassName
+		if idx := strings.Index(className, "$"); idx != -1 {
+			className = className[:idx]
+		}
+		filePath := path.Join(srcDir, strings.ReplaceAll(className, ".", "/")+".java")
+		f := result.AddFile(filePath)
+		for _, bi := range file.BugInstances {
+			f.AddError(bi.Type, severityFindBugs(bi.Priority), bi.Message, bi.LineNumber)
 		}
 	}
 	return &result
 }
 
-func severityFindBugs(priority int) string {
+func severityFindBugs(priority string) string {
 	switch priority {
-	case 1:
+	case "High":
 		return "error"
-	case 2:
+	case "Normal":
 		return "warning"
+	case "Low":
+		return "info"
 	default:
 		return "info"
 	}
