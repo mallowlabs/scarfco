@@ -64,11 +64,12 @@ func convertFindBugs(content []byte) *output.Result {
 }
 
 func severityFindBugs(priority int) string {
-	if priority == 1 {
+	switch priority {
+	case 1:
 		return "error"
-	} else if priority == 2 {
+	case 2:
 		return "warning"
-	} else {
+	default:
 		return "info"
 	}
 }
