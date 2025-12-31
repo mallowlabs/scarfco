@@ -10,6 +10,16 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
+// Converter is a function that converts from a byte slice to a Result.
+type Converter func([]byte) *output.Result
+
+var converters = make(map[string]Converter)
+
+// RegisterConverter registers a converter for a given format.
+func RegisterConverter(format string, converter Converter) {
+	converters[format] = converter
+}
+
 func Read(filename string) ([]byte, error) {
 	var r io.Reader
 	switch filename {
@@ -37,21 +47,12 @@ func Convert(content []byte) (*output.Result, error) {
 		return nil, err
 	}
 
-	var result *output.Result = nil
-
-	switch format {
-	case "pmd":
-		result = convertPMD(content)
-	case "pmd-cpd":
-		result = convertCPD(content)
-	case "BugCollection":
-		result = convertFindBugs(content)
-	case "checkstyle":
-		result = convertCheckstyle(content)
-	default:
-		return nil, errors.New("unknown format error")
+	converter, ok := converters[format]
+	if !ok {
+		return nil, errors.New("unknown format: " + format)
 	}
-	return result, nil
+
+	return converter(content), nil
 }
 
 func selectFormat(content []byte) (string, error) {

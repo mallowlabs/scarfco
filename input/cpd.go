@@ -7,6 +7,10 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
+func init() {
+	RegisterConverter("pmd-cpd", convertCPD)
+}
+
 func convertCPD(content []byte) *output.Result {
 	type File struct {
 		Line int    `xml:"line,attr"`

@@ -8,6 +8,10 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
+func init() {
+	RegisterConverter("BugCollection", convertFindBugs)
+}
+
 func convertFindBugs(content []byte) *output.Result {
 	type BugInstance struct {
 		Type       string `xml:"type,attr"`

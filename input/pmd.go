@@ -7,6 +7,10 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
+func init() {
+	RegisterConverter("pmd", convertPMD)
+}
+
 func convertPMD(content []byte) *output.Result {
 	type Violation struct {
 		Beginline int    `xml:"beginline,attr"`
