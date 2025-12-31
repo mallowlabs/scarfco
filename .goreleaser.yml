@@ -13,10 +13,6 @@ builds:
       - linux
       - windows
       - darwin
-    ldflags:
-      - -s -w
-    flags:
-      - -trimpath
 archives:
   - name_template: >-
       {{- .ProjectName }}_
