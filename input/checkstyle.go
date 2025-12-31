@@ -7,6 +7,10 @@ import (
 	"github.com/mallowlabs/scarfco/output"
 )
 
+func init() {
+	RegisterConverter("checkstyle", convertCheckstyle)
+}
+
 func convertCheckstyle(content []byte) *output.Result {
 	type Error struct {
 		Line     int    `xml:"line,attr"`
