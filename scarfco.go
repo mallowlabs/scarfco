@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime/debug"
 
 	"github.com/mallowlabs/scarfco/input"
 	"github.com/mallowlabs/scarfco/output"
@@ -36,6 +37,20 @@ func run() error {
 }
 
 func main() {
+	var showVersion bool
+	flag.BoolVar(&showVersion, "v", false, "print the version")
+	flag.Parse()
+
+	if showVersion {
+		if info, ok := debug.ReadBuildInfo(); ok {
+			fmt.Println(info.Main.Version)
+		} else {
+			fmt.Fprintln(os.Stderr, "Error: could not read build info")
+			os.Exit(1)
+		}
+		return
+	}
+
 	err := run()
 	if err != nil {
 		log.Print(err.Error())
