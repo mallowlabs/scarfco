@@ -46,6 +46,8 @@ func Convert(content []byte) (*output.Result, error) {
 		result = convertCPD(content)
 	case "BugCollection":
 		result = convertFindBugs(content)
+	case "checkstyle":
+		result = convertCheckstyle(content)
 	default:
 		return nil, errors.New("unknown format error")
 	}
