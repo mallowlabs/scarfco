@@ -21,7 +21,7 @@ func toChekstyle(r *Result) string {
 			buf.WriteString("    <error ")
 
 			buf.WriteString("line=\"")
-			buf.WriteString(fmt.Sprint(e.Line))
+			fmt.Fprint(&buf, e.Line)
 			buf.WriteString("\" ")
 
 			buf.WriteString("severity=\"")
