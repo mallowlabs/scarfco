@@ -63,7 +63,6 @@ func selectFormat(content []byte) (string, error) {
 		token, err := d.Token()
 
 		if err == io.EOF {
-			err = nil
 			break
 		}
 		if err != nil {
