@@ -1,0 +1,16 @@
+name: 'Setup scarfco'
+description: 'Install scarfco CLI'
+inputs:
+  version:
+    description: 'Version to install'
+    required: false
+    default: 'latest'
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        INSTALL_DIR="${{ runner.temp }}/scarfco-bin"
+        mkdir -p "${INSTALL_DIR}"
+        "${{ github.action_path }}/install.sh" -b "${INSTALL_DIR}" "${{ inputs.version }}"
+        echo "${INSTALL_DIR}" >> $GITHUB_PATH
