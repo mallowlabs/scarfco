@@ -28,13 +28,15 @@ jobs:
     - name: Setup Reviewdog
       uses: reviewdog/action-setup@v1
     - name: Setup scarfco
-      run: curl -sfL https://raw.githubusercontent.com/mallowlabs/scarfco/main/install.sh | sh -s
+      uses: mallowlabs/scarfco@main
+      with:
+        version: latest
     - name: Run SpotBugs
       run: mvn spotbugs:spotbugs
     - name: Run Reviewdog (SpotBugs)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/spotbugsXml.xml | ./bin/scanrfco | reviewdog -name=spotbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/spotbugsXml.xml | scarfco | reviewdog -name=spotbugs -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 If you use PMD.
@@ -45,7 +47,7 @@ If you use PMD.
     - name: Run Reviewdog (PMD)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/pmd.xml | ./bin/scanrfco | reviewdog -name=pmd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/pmd.xml | scarfco | reviewdog -name=pmd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 If you use CPD.
@@ -56,7 +58,7 @@ If you use CPD.
     - name: Run Reviewdog (CPD)
       env:
         REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: cat target/cpd.xml | ./bin/scanrfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
+      run: cat target/cpd.xml | scarfco | reviewdog -name=cpd -f=checkstyle -reporter=github-pr-review -diff="git diff ${{ github.event.pull_request.base.sha }}"
 ```
 
 ## How to build
