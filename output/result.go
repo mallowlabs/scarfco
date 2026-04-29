@@ -5,6 +5,7 @@ import "errors"
 type Result struct {
 	Tool    string
 	ToolURI string
+	BaseDir string
 	Files   []ResultFile
 }
 
