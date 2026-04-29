@@ -124,6 +124,42 @@ func TestToSARIF_ToolNameFallback(t *testing.T) {
 	}
 }
 
+func TestToSARIF_RelativePath(t *testing.T) {
+	r := &Result{BaseDir: "/repo"}
+	f := r.AddFile("/repo/src/Foo.java")
+	f.AddError("Rule", "error", "msg", 1)
+
+	got := toSARIF(r)
+
+	if !strings.Contains(got, `"uri": "src/Foo.java"`) {
+		t.Errorf("expected relative path, got:\n%s", got)
+	}
+}
+
+func TestToSARIF_AbsPathFallback(t *testing.T) {
+	r := &Result{BaseDir: "/repo"}
+	f := r.AddFile("/other/src/Foo.java")
+	f.AddError("Rule", "error", "msg", 1)
+
+	got := toSARIF(r)
+
+	if !strings.Contains(got, `"uri": "/other/src/Foo.java"`) {
+		t.Errorf("expected absolute path for file outside BaseDir, got:\n%s", got)
+	}
+}
+
+func TestToSARIF_NoBBaseDir(t *testing.T) {
+	r := &Result{}
+	f := r.AddFile("/abs/path/Foo.java")
+	f.AddError("Rule", "error", "msg", 1)
+
+	got := toSARIF(r)
+
+	if !strings.Contains(got, `"uri": "/abs/path/Foo.java"`) {
+		t.Errorf("expected original absolute path when no BaseDir, got:\n%s", got)
+	}
+}
+
 func TestConvert_SARIF(t *testing.T) {
 	r := &Result{}
 	f := r.AddFile("/src/A.java")

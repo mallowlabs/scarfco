@@ -27,6 +27,9 @@ func run(format string) error {
 		return err
 	}
 	if result != nil {
+		if cwd, err := os.Getwd(); err == nil {
+			result.BaseDir = cwd
+		}
 		converted, err := output.Convert(result, format)
 		if err != nil {
 			return err

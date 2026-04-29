@@ -1,6 +1,10 @@
 package output
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"path/filepath"
+	"strings"
+)
 
 type sarifOutput struct {
 	Schema  string    `json:"$schema"`
@@ -75,6 +79,12 @@ func toSARIF(r *Result) string {
 
 	results := []sarifResult{}
 	for _, f := range r.Files {
+		uri := f.Name
+		if r.BaseDir != "" {
+			if rel, err := filepath.Rel(r.BaseDir, f.Name); err == nil && !strings.HasPrefix(rel, "..") {
+				uri = rel
+			}
+		}
 		for _, e := range f.Errors {
 			results = append(results, sarifResult{
 				RuleID:  e.Source,
@@ -83,7 +93,7 @@ func toSARIF(r *Result) string {
 				Locations: []sarifLocation{
 					{
 						PhysicalLocation: sarifPhysicalLocation{
-							ArtifactLocation: sarifArtifactLocation{URI: f.Name},
+							ArtifactLocation: sarifArtifactLocation{URI: uri},
 							Region:           sarifRegion{StartLine: e.Line},
 						},
 					},
