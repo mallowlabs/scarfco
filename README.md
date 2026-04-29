@@ -105,7 +105,7 @@ jobs:
 
 Requirements:
 
-* Go 1.24.0+
+* Go 1.26.2+
 
 ```shell
 $ go build scarfco.go
