@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 https://pmd.github.io/schema/report_2_0_0.xsd" version="7.17.0" timestamp="2026-04-29T02:00:29.962">
+<file name="/home/runner/work/scarfco-example/scarfco-example/src/main/java/example/App.java">
+<violation beginline="18" endline="18" begincolumn="20" endcolumn="26" rule="OverrideBothEqualsAndHashcode" ruleset="Error Prone" package="example" class="App" method="equals" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_errorprone.html#overridebothequalsandhashcode" priority="3">
+Ensure you override both equals() and hashCode()
+</violation>
+<violation beginline="37" endline="37" begincolumn="17" endcolumn="18" rule="UnusedLocalVariable" ruleset="Best Practices" package="example" class="App" method="run" variable="b" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_bestpractices.html#unusedlocalvariable" priority="3">
+Avoid unused local variables such as 'b'.
+</violation>
+<violation beginline="38" endline="40" begincolumn="11" endcolumn="10" rule="EmptyCatchBlock" ruleset="Error Prone" package="example" class="App" method="run" externalInfoUrl="https://docs.pmd-code.org/pmd-doc-7.17.0/pmd_rules_java_errorprone.html#emptycatchblock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+</pmd>
