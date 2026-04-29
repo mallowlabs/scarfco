@@ -111,6 +111,34 @@ func TestIntegration_CPD(t *testing.T) {
 	}
 }
 
+func TestIntegration_SpotbugsXml(t *testing.T) {
+	content := readTestdata(t, "spotbugsXml.xml")
+	r, err := input.Convert(content)
+	if err != nil {
+		t.Fatalf("Convert error: %v", err)
+	}
+
+	if len(r.Files) != 1 {
+		t.Fatalf("expected 1 file, got %d", len(r.Files))
+	}
+	if !strings.HasSuffix(r.Files[0].Name, "example/App.java") {
+		t.Errorf("unexpected file name: %s", r.Files[0].Name)
+	}
+	if len(r.Files[0].Errors) != 1 {
+		t.Fatalf("expected 1 error, got %d", len(r.Files[0].Errors))
+	}
+	e := r.Files[0].Errors[0]
+	if e.Source != "HE_EQUALS_USE_HASHCODE" {
+		t.Errorf("expected source HE_EQUALS_USE_HASHCODE, got %q", e.Source)
+	}
+	if e.Severity != "error" {
+		t.Errorf("expected severity error, got %q", e.Severity)
+	}
+	if e.Line != 19 {
+		t.Errorf("expected line 19, got %d", e.Line)
+	}
+}
+
 func TestIntegration_Checkstyle(t *testing.T) {
 	content := readTestdata(t, "checkstyle-result.xml")
 	r, err := input.Convert(content)
