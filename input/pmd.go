@@ -33,7 +33,7 @@ func convertPMD(content []byte) *output.Result {
 	var pmd Pmd
 	xml.Unmarshal(content, &pmd)
 
-	result := output.Result{}
+	result := output.Result{Tool: "PMD", ToolURI: "https://pmd.github.io/"}
 	for _, file := range pmd.Files {
 		f := result.AddFile(file.Name)
 		for _, violation := range file.Violations {

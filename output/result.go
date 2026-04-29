@@ -3,7 +3,9 @@ package output
 import "errors"
 
 type Result struct {
-	Files []ResultFile
+	Tool    string
+	ToolURI string
+	Files   []ResultFile
 }
 
 type ResultFile struct {
@@ -33,6 +35,8 @@ func Convert(r *Result, format string) (string, error) {
 	switch format {
 	case "checkstyle":
 		return toChekstyle(r), nil
+	case "sarif":
+		return toSARIF(r), nil
 	default:
 		return "", errors.New("unknown output format")
 	}
