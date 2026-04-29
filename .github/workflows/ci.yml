@@ -25,6 +25,10 @@ jobs:
           version: latest
           args: --disable errcheck
 
+      - name: Test
+        run: |
+          go test ./...
+
       - name: Build
         run: |
           go build

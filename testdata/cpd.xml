@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd xmlns="https://pmd-code.org/schema/cpd-report"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         pmdVersion="7.17.0"
+         timestamp="2026-04-29T02:00:28.0690402Z"
+         version="1.0.0"
+         xsi:schemaLocation="https://pmd-code.org/schema/cpd-report https://pmd.github.io/schema/cpd-report_1_0_0.xsd">
+   <file path="/home/runner/work/scarfco-example/scarfco-example/src/main/java/example/App.java"
+         totalNumberOfTokens="212"/>
+   <file path="/home/runner/work/scarfco-example/scarfco-example/src/main/java/example/Greeter.java"
+         totalNumberOfTokens="103"/>
+   <duplication lines="10" tokens="50">
+      <file begintoken="136"
+            column="36"
+            endcolumn="6"
+            endline="53"
+            endtoken="185"
+            line="44"
+            path="/home/runner/work/scarfco-example/scarfco-example/src/main/java/example/App.java"/>
+      <file begintoken="265"
+            column="34"
+            endcolumn="6"
+            endline="28"
+            endtoken="314"
+            line="19"
+            path="/home/runner/work/scarfco-example/scarfco-example/src/main/java/example/Greeter.java"/>
+      <codefragment><![CDATA[        for (int i = 0; i < limit; i++) {
+            sb.append(i);
+            sb.append(", ");
+            if (i % 10 == 0) {
+                sb.append("\n");
+            }
+        }
+        String result = sb.toString();
+        System.out.println(result);
+    }
+]]></codefragment>
+   </duplication>
+</pmd-cpd>
