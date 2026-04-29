@@ -3,7 +3,9 @@ package output
 import "errors"
 
 type Result struct {
-	Files []ResultFile
+	Tool    string
+	ToolURI string
+	Files   []ResultFile
 }
 
 type ResultFile struct {

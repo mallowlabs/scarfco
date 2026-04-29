@@ -31,7 +31,7 @@ func convertCheckstyle(content []byte) *output.Result {
 	var checkstyle Checkstyle
 	xml.Unmarshal(content, &checkstyle)
 
-	result := output.Result{}
+	result := output.Result{Tool: "Checkstyle", ToolURI: "https://checkstyle.sourceforge.io/"}
 	for _, file := range checkstyle.Files {
 		f := result.AddFile(file.Name)
 		for _, err := range file.Errors {

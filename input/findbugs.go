@@ -73,7 +73,7 @@ func convertFindBugs(content []byte) *output.Result {
 		srcDir = bc.Project.SrcDirs[0].Path
 	}
 
-	result := output.Result{}
+	result := output.Result{Tool: "SpotBugs", ToolURI: "https://spotbugs.github.io/"}
 
 	if len(bc.Files) > 0 {
 		// xdoc format

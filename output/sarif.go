@@ -92,6 +92,15 @@ func toSARIF(r *Result) string {
 		}
 	}
 
+	toolName := r.Tool
+	if toolName == "" {
+		toolName = "scarfco"
+	}
+	toolURI := r.ToolURI
+	if toolURI == "" {
+		toolURI = "https://github.com/mallowlabs/scarfco"
+	}
+
 	out := sarifOutput{
 		Schema:  "https://json.schemastore.org/sarif-2.1.0.json",
 		Version: "2.1.0",
@@ -99,8 +108,8 @@ func toSARIF(r *Result) string {
 			{
 				Tool: sarifTool{
 					Driver: sarifDriver{
-						Name:           "scarfco",
-						InformationURI: "https://github.com/mallowlabs/scarfco",
+						Name:           toolName,
+						InformationURI: toolURI,
 						Rules:          rules,
 					},
 				},

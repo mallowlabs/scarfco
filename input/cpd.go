@@ -56,7 +56,7 @@ func convertCPD(content []byte) *output.Result {
 		}
 	}
 
-	result := output.Result{}
+	result := output.Result{Tool: "CPD", ToolURI: "https://pmd.github.io/latest/pmd_userdocs_cpd.html"}
 	for k, v := range m {
 		file := result.AddFile(k)
 		for _, rf := range v {

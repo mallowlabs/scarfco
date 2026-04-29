@@ -94,6 +94,36 @@ func TestToSARIF_EmptyResult(t *testing.T) {
 	}
 }
 
+func TestToSARIF_ToolName(t *testing.T) {
+	r := &Result{Tool: "SpotBugs", ToolURI: "https://spotbugs.github.io/"}
+	f := r.AddFile("/src/Foo.java")
+	f.AddError("Rule", "error", "msg", 1)
+
+	got := toSARIF(r)
+
+	if !strings.Contains(got, `"name": "SpotBugs"`) {
+		t.Errorf("expected tool name SpotBugs, got:\n%s", got)
+	}
+	if !strings.Contains(got, `"informationUri": "https://spotbugs.github.io/"`) {
+		t.Errorf("expected informationUri spotbugs.github.io, got:\n%s", got)
+	}
+}
+
+func TestToSARIF_ToolNameFallback(t *testing.T) {
+	r := &Result{}
+	f := r.AddFile("/src/Foo.java")
+	f.AddError("Rule", "error", "msg", 1)
+
+	got := toSARIF(r)
+
+	if !strings.Contains(got, `"name": "scarfco"`) {
+		t.Errorf("expected fallback tool name scarfco, got:\n%s", got)
+	}
+	if !strings.Contains(got, `"informationUri": "https://github.com/mallowlabs/scarfco"`) {
+		t.Errorf("expected fallback informationUri scarfco, got:\n%s", got)
+	}
+}
+
 func TestConvert_SARIF(t *testing.T) {
 	r := &Result{}
 	f := r.AddFile("/src/A.java")
